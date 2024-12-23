@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">  
+  <title>Auto Fetch Google Sheets Data</title>
+</head>
+<body>
+  <nav class="nav">
+    <div class="menu">
+      <a href="./about.html">About</a>
+      <a href="./inputForm.html">Input Form</a>
+      <a href="./home.html">Home</a>
+    </div>
+    <input type="text" id="searchInput" placeholder="Search..." autocomplete="off">
+      <div id="results"></div>
+  </nav>
+      <p>hello from index</p> 
+
+  <table id="sheetData">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Number</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Data will be inserted here -->
+    </tbody>
+  </table>
+
+  <script src="navbar.js"></script>
+  <script src="fetchData.js"></script>
+</body>
+</html>
