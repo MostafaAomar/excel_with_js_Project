@@ -11,7 +11,8 @@
             const pages = [
                 { name: 'About Page', url: 'about.html' },
                 { name: 'Search Page', url: 'index.html' },
-                { name: 'Search Page', url: 'home.html' }
+                { name: 'Home Page', url: 'home.html' },
+                { name: 'Input Form Page', url: 'inputForm.html' }
             ];
 
             for (const page of pages) {
