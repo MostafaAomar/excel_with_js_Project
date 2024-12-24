@@ -41,7 +41,8 @@ async function search() {
 
             sentences.forEach(sentence => {
                 console.log(`Checking sentence: ${sentence.trim()}`); // Log each sentence
-                if (sentence.toLowerCase().includes(searchTerm)) {
+                const regex = new RegExp(`\\b${searchTerm}\\b`, 'i'); // Create a regex for the search term
+                if (regex.test(sentence)) {
                     console.log(`Match found: ${sentence.trim()}`); // Log matching sentence
                     const resultItem = document.createElement("div");
                     resultItem.className = "result-item";
@@ -75,7 +76,7 @@ document.addEventListener('click', (event) => {
 
     if (!searchInput.contains(event.target) && !resultsDiv.contains(event.target)) {
         resultsDiv.style.display = "none";
-    } 
+    }
 });
 
 document.getElementById('searchInput').addEventListener('focus', () => {
