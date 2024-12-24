@@ -64,6 +64,7 @@ async function search() {
         resultsDiv.textContent = `"${searchTerm}" not found.`;
     }
 
+    console.log(`Results Div Content: ${resultsDiv.innerHTML}`); // Log the content of resultsDiv
     resultsDiv.style.display = hasResults ? "block" : "none";
 }
 
