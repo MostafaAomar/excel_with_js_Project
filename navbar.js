@@ -21,14 +21,20 @@ async function search() {
 
     for (const page of pages) {
         try {
+            console.log(`Fetching content from: ${page.url}`); // Debug: Log the URL being fetched
+
             // Fetch the page content
             const response = await fetch(page.url);
+            console.log(`Response status for ${page.url}:`, response.status); // Debug: Log the response status
+
             if (!response.ok) {
                 throw new Error(`Failed to fetch ${page.url}`);
             }
-            let text = await response.text();
 
-            // Filter out unwanted scripts (Live Server injected code)
+            let text = await response.text();
+            console.log(`Raw content fetched from ${page.url}:`, text); // Debug: Log raw HTML content
+
+            // Filter out unwanted scripts
             text = text.replace(/<script[\s\S]*?<\/script>/gi, "");
 
             // Parse HTML content and extract text excluding navbar
@@ -40,8 +46,7 @@ async function search() {
             if (navbar) navbar.remove(); // Remove navbar from the document
             const content = doc.body.textContent || ""; // Extract plain text from body
 
-            // Debug: Log the content being searched
-            console.log("Content being searched:", content);
+            console.log(`Processed text content from ${page.url}:`, content); // Debug: Log the processed text content
 
             // Search for the term within the page content
             const sentences = content.split(/[.!?]/); // Split into sentences
