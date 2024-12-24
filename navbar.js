@@ -1,6 +1,6 @@
 // Function to perform the search and dynamically fetch content
 async function search() {
-    const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase(); // Get search term and normalize
+    const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
     const resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = ""; // Clear previous results
 
@@ -9,6 +9,7 @@ async function search() {
         return;
     }
 
+    // List of pages to search
     const pages = [
         { name: 'About Page', url: 'about.html' },
         { name: 'Search Page', url: 'index.html' },
@@ -20,35 +21,37 @@ async function search() {
 
     for (const page of pages) {
         try {
-            // Fetch page content
+            // Fetch the page content
             const response = await fetch(page.url);
             if (!response.ok) {
                 throw new Error(`Failed to fetch ${page.url}`);
             }
-            let text = await response.text(); // Get page text
+            let text = await response.text();
 
-            // Clean up unwanted script tags
+            // Filter out unwanted scripts (Live Server injected code)
             text = text.replace(/<script[\s\S]*?<\/script>/gi, "");
 
-            // Parse HTML and remove the navbar element
+            // Parse HTML content and extract text excluding navbar
             const parser = new DOMParser();
             const doc = parser.parseFromString(text, 'text/html');
-            const navbar = doc.querySelector('nav');
-            if (navbar) navbar.remove(); // Remove navbar
-            const content = doc.body.textContent || ""; // Get body text
 
-            // Split content into sentences or words (for exact match)
-            const sentences = content.split(/[.!?]/); // Split by sentence enders
+            // Extract content without navbar text
+            const navbar = doc.querySelector('nav'); // Adjust selector based on your navbar structure
+            if (navbar) navbar.remove(); // Remove navbar from the document
+            const content = doc.body.textContent || ""; // Extract plain text from body
+
+            // Debug: Log the content being searched
+            console.log("Content being searched:", content);
+
+            // Search for the term within the page content
+            const sentences = content.split(/[.!?]/); // Split into sentences
             sentences.forEach(sentence => {
-                const cleanedSentence = sentence.trim().toLowerCase(); // Normalize the sentence
-
-                // Check for exact match (whole word match)
-                if (cleanedSentence.includes(searchTerm)) {
+                if (sentence.toLowerCase().includes(searchTerm)) {
                     const resultItem = document.createElement("div");
                     resultItem.className = "result-item";
                     resultItem.textContent = sentence.trim();
 
-                    // Click event to navigate with highlighted search term
+                    // Add click event to navigate to the page with the search term highlighted
                     resultItem.addEventListener("click", () => {
                         window.location.href = `${page.url}#highlight=${encodeURIComponent(searchTerm)}`;
                     });
@@ -62,17 +65,18 @@ async function search() {
         }
     }
 
+    // Display "not found" message if no results
     if (!hasResults) {
-        resultsDiv.textContent = `"${searchTerm}" not found.`; // Display "not found" if no matches
+        resultsDiv.textContent = `"${searchTerm}" not found.`;
     }
 
-    resultsDiv.style.display = hasResults ? "block" : "none"; // Show or hide results
+    resultsDiv.style.display = hasResults ? "block" : "none"; // Show/hide results
 }
 
-// Add event listener for search input
+// Add event listener to search input
 document.getElementById('searchInput').addEventListener('input', search);
 
-// Add event listener to hide dropdown when clicking outside
+// Hide dropdown when clicking outside
 document.addEventListener('click', (event) => {
     const searchInput = document.getElementById('searchInput');
     const resultsDiv = document.getElementById('results');
@@ -83,10 +87,10 @@ document.addEventListener('click', (event) => {
     }
 });
 
-// Ensure results are visible when typing or focusing on the input
+// Ensure results are visible when typing
 document.getElementById('searchInput').addEventListener('focus', () => {
     const resultsDiv = document.getElementById('results');
     if (resultsDiv.innerHTML) {
-        resultsDiv.style.display = "block"; // Show results
+        resultsDiv.style.display = "block";
     }
 });
