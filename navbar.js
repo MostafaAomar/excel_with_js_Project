@@ -3,6 +3,8 @@ async function search() {
     const resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = ""; // Clear previous results
 
+    console.log(`Search term: "${searchTerm}"`); // Debug: Log the search term
+
     if (!searchTerm) {
         resultsDiv.style.display = "none"; // Hide results if input is empty
         return;
@@ -49,7 +51,7 @@ async function search() {
 
             // Search for the term within the page content
             const sentences = content.split(/[.!?]/); // Split into sentences
-            sentences.forEach((sentence) => {
+            for (const sentence of sentences) {
                 console.log(`Checking sentence: "${sentence.trim()}"`); // Debug: Log each sentence
                 if (sentence.toLowerCase().includes(searchTerm)) {
                     console.log(`Match found in sentence: "${sentence.trim()}"`); // Debug: Log matched sentence
@@ -65,15 +67,15 @@ async function search() {
                     resultsDiv.appendChild(resultItem);
                     hasResults = true;
                 }
-            });
+            }
         } catch (error) {
             console.error(`Error fetching ${page.url}:`, error);
         }
     }
 
-    // Display "not found" message if no results
     if (!hasResults) {
-        resultsDiv.textContent = `"${searchTerm}" not found.`;
+        console.log(`No matches found for "${searchTerm}".`); // Debug: Log no matches
+        resultsDiv.textContent = `"${searchTerm}" not found.`; // Display "not found" message
     }
 
     resultsDiv.style.display = hasResults ? "block" : "none"; // Show/hide results
