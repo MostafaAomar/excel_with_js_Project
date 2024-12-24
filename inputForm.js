@@ -8,7 +8,7 @@ async function submitForm(event) {
 
   // Send the data to Google Apps Script Web App
   try {
-    const response = await fetch('https://script.google.com/macros/s/AKfycbypfZOlAMBkyM8RZS8waUNhadlpt8IVxuGHvvcCwzd546ulGpVEwB4btSDd2DeXUzao/exec', {
+    const response = await fetch('https://script.google.com/macros/s/AKfycbyGvFVO31eiYiPdHvaZ4gKHBfYURzNoR4OGwBcNYOYsTy-sfCC3q9WQRAWJJPo-0w2d/exec', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
