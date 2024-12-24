@@ -1,6 +1,7 @@
 // Function to perform the search and dynamically fetch content
 async function search() {
     const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+    console.log(`Search Term: ${searchTerm}`); // Log the search term
     const resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = "";
 
@@ -39,7 +40,9 @@ async function search() {
             const sentences = content.split(/[.!?]/);
 
             sentences.forEach(sentence => {
+                console.log(`Checking sentence: ${sentence.trim()}`); // Log each sentence
                 if (sentence.toLowerCase().includes(searchTerm)) {
+                    console.log(`Match found: ${sentence.trim()}`); // Log matching sentence
                     const resultItem = document.createElement("div");
                     resultItem.className = "result-item";
                     resultItem.textContent = sentence.trim();
