@@ -8,7 +8,6 @@ async function search() {
         return;
     }
 
-    // List of pages to search
     const pages = [
         { name: 'About Page', url: 'about.html' },
         { name: 'Search Page', url: 'index.html' },
@@ -20,49 +19,38 @@ async function search() {
 
     for (const page of pages) {
         try {
-            console.log(`Fetching content from: ${page.url}`); // Debug: Log the URL being fetched
+            console.log(`Fetching content from: ${page.url}`);
 
-            // Fetch the page content
             const response = await fetch(page.url);
-            console.log(`Response status for ${page.url}:`, response.status); // Debug: Log the response status
-
             if (!response.ok) {
-                throw new Error(`Failed to fetch ${page.url}`);
+                console.error(`Failed to fetch ${page.url}: ${response.status}`);
+                continue;
             }
 
             let text = await response.text();
-            console.log(`Raw content fetched from ${page.url}:`, text); // Debug: Log raw HTML content
+            console.log(`Raw content from ${page.url}:`, text);
 
-            // Filter out unwanted scripts
-            text = text.replace(/<script[\s\S]*?<\/script>/gi, "");
-
-            // Parse HTML content and extract text excluding navbar
+            // Remove <script> and <nav> tags
             const parser = new DOMParser();
             const doc = parser.parseFromString(text, 'text/html');
 
-            // Remove navbar text
+            // Remove navbar and scripts
             const navbar = doc.querySelector('nav');
-            if (navbar) {
-                navbar.remove();
-                console.log(`Navbar removed for ${page.url}`);
-            }
+            if (navbar) navbar.remove();
+            text = (doc.body.textContent || "").replace(/<script[\s\S]*?<\/script>/gi, "").trim();
 
-            const content = doc.body.textContent || ""; // Extract plain text from body
-            console.log(`Processed text content from ${page.url}:`, content.trim()); // Debug: Log processed text
+            console.log(`Processed content from ${page.url}:`, text);
 
-            // Search for the term within the page content
-            const sentences = content.split(/[.!?]/); // Split into sentences
+            // Search for the term
+            const sentences = text.split(/[.!?]/);
             sentences.forEach((sentence) => {
-                console.log(`Checking sentence: "${sentence.trim()}"`); // Debug: Log each sentence
-                console.log(`Does sentence include term "${searchTerm}"?`, sentence.toLowerCase().includes(searchTerm)); // Debug: Match result
                 if (sentence.toLowerCase().includes(searchTerm)) {
-                    console.log(`Match found in sentence: "${sentence.trim()}"`); // Debug: Log matched sentence
-                    const resultItem = document.createElement("div");
-                    resultItem.className = "result-item";
+                    console.log(`Match found in: "${sentence.trim()}"`);
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'result-item';
                     resultItem.textContent = sentence.trim();
 
-                    // Add click event to navigate to the page with the search term highlighted
-                    resultItem.addEventListener("click", () => {
+                    resultItem.addEventListener('click', () => {
                         window.location.href = `${page.url}#highlight=${encodeURIComponent(searchTerm)}`;
                     });
 
@@ -71,14 +59,13 @@ async function search() {
                 }
             });
         } catch (error) {
-            console.error(`Error fetching ${page.url}:`, error);
+            console.error(`Error processing ${page.url}:`, error);
         }
     }
 
-    // Display "not found" message if no results
     if (!hasResults) {
         resultsDiv.textContent = `"${searchTerm}" not found.`;
     }
 
-    resultsDiv.style.display = hasResults ? "block" : "none"; // Show/hide results
+    resultsDiv.style.display = hasResults ? "block" : "none"; // Show results only if found
 }
