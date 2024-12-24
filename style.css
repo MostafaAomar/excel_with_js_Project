@@ -40,3 +40,16 @@
   text-decoration: none;
   margin: 20px;
  }
+ .row {
+  display: flex;
+  margin-bottom: 5px;
+}
+
+.left {
+  width: 100px;
+}
+
+.right {
+  flex: 1;
+  padding-left: 10px;
+}
