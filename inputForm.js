@@ -30,7 +30,7 @@ async function submitForm(event) {
     }
 
     // Display the message for 30 seconds and then disappear 
-    setTimeout(() => { msg.innerText = ''; }, 30000); // 30000 milliseconds = 30 seconds
+    setTimeout(() => { msg.innerText = ''; }, 10000); // 30000 milliseconds = 30 seconds
 // Clear the form inputs
  event.target.reset();
   } catch (error) {
@@ -38,7 +38,7 @@ async function submitForm(event) {
     const msg = document.getElementById('alertMessage');
     msg.innerText = "Error: " + error.message;
     msg.style.color = 'red'; // Set text color to red for error
-    setTimeout(() => { msg.innerText = ''; }, 30000);
+    setTimeout(() => { msg.innerText = ''; }, 10000);
   }
 }
 
