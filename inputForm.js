@@ -8,7 +8,7 @@ async function submitForm(event) {
   };
 
   try {
-    const response = await fetch('https://script.google.com/macros/s/AKfycbxYe2fbetgn8j_N818ngbRZxZt5t300VMZrwavSe9Uc0JjxCePB6Olk4AMxV2oqnL0k/exec',  {
+    const response = await fetch('https://script.google.com/macros/s/AKfycbz3uDrUHHyvru3km6SwvZZS9Dj5O4k8ilXHQ7wYQJqL1WezouUlKLTH9LxI9qdBceNC/exec',  {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData),
