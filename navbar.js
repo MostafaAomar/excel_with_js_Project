@@ -75,7 +75,7 @@ document.addEventListener('click', (event) => {
 
     if (!searchInput.contains(event.target) && !resultsDiv.contains(event.target)) {
         resultsDiv.style.display = "none";
-    }
+    } 
 });
 
 document.getElementById('searchInput').addEventListener('focus', () => {
