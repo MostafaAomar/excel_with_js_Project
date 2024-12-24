@@ -11,7 +11,7 @@ async function submitForm(event) {
     const response = await fetch('https://script.google.com/macros/s/AKfycbz_LyEdBy_urgwjZylFRB9FpBL_k06BXdi-emUnH_Fnv5b7mofk8rHHaWT3YXq2pxJL/exec', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: JSON.stringify(formObject),
     });
