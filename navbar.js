@@ -20,7 +20,9 @@ async function search() {
     const resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = ""; // Clear previous results
 
-    if (!searchTerm) return; // Exit if the search term is empty
+    if (!searchTerm) {
+        return; // Exit if the search term is empty
+    }
 
     // List of pages to search
     const pages = [
@@ -32,6 +34,7 @@ async function search() {
 
     let hasResults = false;
 
+    // Loop through each page and search for the term
     for (const page of pages) {
         try {
             console.log(`Fetching content from: ${page.url}`);
@@ -49,8 +52,8 @@ async function search() {
             const content = extractTextFromHTML(rawContent);
             console.log(`Processed content from ${page.url}:`, content);
 
-            // Search logic
-            const sentences = content.split(/[.!?]/); // Split into sentences
+            // Split content into sentences and search for matches
+            const sentences = content.split(/[.!?]/); // Split into sentences by punctuation
             sentences.forEach(sentence => {
                 if (sentence.toLowerCase().includes(searchTerm)) {
                     console.log(`Match found: "${sentence.trim()}"`);
@@ -72,10 +75,11 @@ async function search() {
         }
     }
 
+    // Display message if no results were found
     if (!hasResults) {
         resultsDiv.textContent = `"${searchTerm}" not found.`; // Display "not found" message
     }
 }
 
-// Attach the search function to the input field
+// Attach the search function to the input field (input event)
 document.getElementById('searchInput').addEventListener('input', search);
