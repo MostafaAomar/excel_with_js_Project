@@ -21,10 +21,12 @@ async function search() {
     for (const page of pages) {
         try {
             const response = await fetch(page.url);
+            console.log(`Fetching ${page.url}: ${response.status}`); // Log the response status
             if (!response.ok) {
                 throw new Error(`Failed to fetch ${page.url}`);
             }
             let text = await response.text();
+            console.log(`Fetched content from ${page.url}:`, text); // Log the fetched content
             text = text.replace(/<script[\s\S]*?<\/script>/gi, "");
 
             const parser = new DOMParser();
@@ -33,6 +35,7 @@ async function search() {
             if (navbar) navbar.remove();
 
             const content = doc.body.textContent || "";
+            console.log(`Parsed content from ${page.url}:`, content); // Log the parsed content
             const sentences = content.split(/[.!?]/);
 
             sentences.forEach(sentence => {
