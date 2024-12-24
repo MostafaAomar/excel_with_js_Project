@@ -3,8 +3,6 @@ async function search() {
     const resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = ""; // Clear previous results
 
-    console.log(`Search term: "${searchTerm}"`); // Debug: Log the search term
-
     if (!searchTerm) {
         resultsDiv.style.display = "none"; // Hide results if input is empty
         return;
@@ -44,15 +42,19 @@ async function search() {
 
             // Remove navbar text
             const navbar = doc.querySelector('nav');
-            if (navbar) navbar.remove();
+            if (navbar) {
+                navbar.remove();
+                console.log(`Navbar removed for ${page.url}`);
+            }
 
             const content = doc.body.textContent || ""; // Extract plain text from body
-            console.log(`Processed text content from ${page.url}:`, content); // Debug: Log processed text
+            console.log(`Processed text content from ${page.url}:`, content.trim()); // Debug: Log processed text
 
             // Search for the term within the page content
             const sentences = content.split(/[.!?]/); // Split into sentences
-            for (const sentence of sentences) {
+            sentences.forEach((sentence) => {
                 console.log(`Checking sentence: "${sentence.trim()}"`); // Debug: Log each sentence
+                console.log(`Does sentence include term "${searchTerm}"?`, sentence.toLowerCase().includes(searchTerm)); // Debug: Match result
                 if (sentence.toLowerCase().includes(searchTerm)) {
                     console.log(`Match found in sentence: "${sentence.trim()}"`); // Debug: Log matched sentence
                     const resultItem = document.createElement("div");
@@ -67,15 +69,15 @@ async function search() {
                     resultsDiv.appendChild(resultItem);
                     hasResults = true;
                 }
-            }
+            });
         } catch (error) {
             console.error(`Error fetching ${page.url}:`, error);
         }
     }
 
+    // Display "not found" message if no results
     if (!hasResults) {
-        console.log(`No matches found for "${searchTerm}".`); // Debug: Log no matches
-        resultsDiv.textContent = `"${searchTerm}" not found.`; // Display "not found" message
+        resultsDiv.textContent = `"${searchTerm}" not found.`;
     }
 
     resultsDiv.style.display = hasResults ? "block" : "none"; // Show/hide results
