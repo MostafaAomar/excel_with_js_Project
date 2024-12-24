@@ -16,11 +16,29 @@ async function submitForm(event) {
       body: JSON.stringify(formObject),
     });
 
-    const result = await response.text();
-    alert(result); // Success message
+    const data = await response.json();
+    console.log(data);  // Log the response from the server
+
+    // Handle the success message
+    const msg = document.getElementById('alertMessage');
+    if (data.message) {
+      msg.innerText = data.message;
+      msg.style.color = 'green'; // Set text color to green for success
+    } else if (data.error) {
+      msg.innerText = "Error: " + data.error;
+      msg.style.color = 'red'; // Set text color to red for error
+    }
+
+    // Display the message for 30 seconds and then disappear 
+    setTimeout(() => { msg.innerText = ''; }, 30000); // 30000 milliseconds = 30 seconds
+// Clear the form inputs
+ event.target.reset();
   } catch (error) {
-    console.error('Error:', error);
-    alert('Failed to save data. Please try again.');
+    console.error("Error submitting the form: ", error);
+    const msg = document.getElementById('alertMessage');
+    msg.innerText = "Error: " + error.message;
+    msg.style.color = 'red'; // Set text color to red for error
+    setTimeout(() => { msg.innerText = ''; }, 30000);
   }
 }
 
