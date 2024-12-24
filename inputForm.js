@@ -1,23 +1,44 @@
 async function submitForm(event) {
-  event.preventDefault(); // Prevent form reload
-  
-  const formData = {
-    name: document.getElementById('name').value,
-    email: document.getElementById('email').value,
-    message: document.getElementById('message').value,
-  };
+  event.preventDefault(); // Prevent default form submission
 
+  // Get form data
+  const formData = new FormData(event.target);
+  const formObject = {};
+  formData.forEach((value, key) => { formObject[key] = value });
+
+  // Send the data to Google Apps Script Web App
   try {
-    const response = await fetch('https://script.google.com/macros/s/AKfycbxYe2fbetgn8j_N818ngbRZxZt5t300VMZrwavSe9Uc0JjxCePB6Olk4AMxV2oqnL0k/exec',  {
+    const response = await fetch('https://script.google.com/macros/s/AKfycbz_LyEdBy_urgwjZylFRB9FpBL_k06BXdi-emUnH_Fnv5b7mofk8rHHaWT3YXq2pxJL/exec', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: JSON.stringify(formObject),
     });
 
-    const result = await response.text();
-    alert(result); // Success message
+    const data = await response.json();
+    console.log(data);  // Log the response from the server
+
+    // Handle the success message
+    const msg = document.getElementById('alertMessage');
+    if (data.message) {
+      msg.innerText = data.message;
+      msg.style.color = 'green'; // Set text color to green for success
+    } else if (data.error) {
+      msg.innerText = "Error: " + data.error;
+      msg.style.color = 'red'; // Set text color to red for error
+    }
+
+    // Display the message for 30 seconds and then disappear 
+    setTimeout(() => { msg.innerText = ''; }, 30000); // 30000 milliseconds = 30 seconds
+// Clear the form inputs
+ event.target.reset();
   } catch (error) {
-    console.error('Error:', error);
-    alert('Failed to save data. Please try again.');
+    console.error("Error submitting the form: ", error);
+    const msg = document.getElementById('alertMessage');
+    msg.innerText = "Error: " + error.message;
+    msg.style.color = 'red'; // Set text color to red for error
+    setTimeout(() => { msg.innerText = ''; }, 30000);
   }
 }
+
