@@ -1,3 +1,4 @@
+// Function to perform the search and dynamically fetch content
 async function search() {
     const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
     const resultsDiv = document.getElementById('results');
@@ -8,6 +9,7 @@ async function search() {
         return;
     }
 
+    // List of pages to search
     const pages = [
         { name: 'About Page', url: 'about.html' },
         { name: 'Search Page', url: 'index.html' },
@@ -20,8 +22,8 @@ async function search() {
     for (const page of pages) {
         try {
             console.log(`Fetching content from: ${page.url}`);
-
             const response = await fetch(page.url);
+
             if (!response.ok) {
                 console.error(`Failed to fetch ${page.url}: ${response.status}`);
                 continue;
@@ -30,19 +32,20 @@ async function search() {
             let text = await response.text();
             console.log(`Raw content from ${page.url}:`, text);
 
-            // Remove <script> and <nav> tags
+            // Parse HTML content and remove navbar and scripts
             const parser = new DOMParser();
             const doc = parser.parseFromString(text, 'text/html');
 
-            // Remove navbar and scripts
+            // Remove unnecessary sections (e.g., navbar)
             const navbar = doc.querySelector('nav');
             if (navbar) navbar.remove();
-            text = (doc.body.textContent || "").replace(/<script[\s\S]*?<\/script>/gi, "").trim();
 
-            console.log(`Processed content from ${page.url}:`, text);
+            // Extract body text
+            const content = doc.body.textContent || "";
+            console.log(`Processed content from ${page.url}:`, content);
 
-            // Search for the term
-            const sentences = text.split(/[.!?]/);
+            // Split into sentences and search for the term
+            const sentences = content.split(/[.!?]/);
             sentences.forEach((sentence) => {
                 if (sentence.toLowerCase().includes(searchTerm)) {
                     console.log(`Match found in: "${sentence.trim()}"`);
@@ -50,6 +53,7 @@ async function search() {
                     resultItem.className = 'result-item';
                     resultItem.textContent = sentence.trim();
 
+                    // Add click event to navigate to the page
                     resultItem.addEventListener('click', () => {
                         window.location.href = `${page.url}#highlight=${encodeURIComponent(searchTerm)}`;
                     });
@@ -67,5 +71,8 @@ async function search() {
         resultsDiv.textContent = `"${searchTerm}" not found.`;
     }
 
-    resultsDiv.style.display = hasResults ? "block" : "none"; // Show results only if found
+    resultsDiv.style.display = hasResults ? "block" : "none";
 }
+
+// Attach event listener
+document.getElementById('searchInput').addEventListener('input', search);
