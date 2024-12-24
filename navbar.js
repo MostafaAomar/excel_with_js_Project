@@ -49,13 +49,13 @@ async function search() {
             console.log(`Raw content from ${page.url}:`, rawContent);
 
             // Process the content to extract meaningful text
-            const content = extractTextFromHTML(rawContent);
+            const content = extractTextFromHTML(rawContent).toLowerCase(); // Convert content to lowercase
             console.log(`Processed content from ${page.url}:`, content);
 
             // Split content into sentences and search for matches
             const sentences = content.split(/[.!?]/); // Split into sentences by punctuation
             sentences.forEach(sentence => {
-                if (sentence.toLowerCase().includes(searchTerm)) {
+                if (sentence.includes(searchTerm)) {
                     console.log(`Match found: "${sentence.trim()}"`);
                     const resultItem = document.createElement('div');
                     resultItem.className = 'result-item';
