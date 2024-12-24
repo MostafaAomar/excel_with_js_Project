@@ -73,7 +73,7 @@ document.addEventListener('click', (event) => {
     const searchInput = document.getElementById('searchInput');
     const resultsDiv = document.getElementById('results');
 
-    if (!searchInput contains(event.target) && !resultsDiv.contains(event.target)) {
+    if (!searchInput.contains(event.target) && !resultsDiv.contains(event.target)) {
         resultsDiv.style.display = "none";
     }
 });
