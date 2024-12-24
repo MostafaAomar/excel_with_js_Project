@@ -1,4 +1,3 @@
-// Function to perform the search and dynamically fetch content
 async function search() {
     const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
     const resultsDiv = document.getElementById('results');
@@ -41,17 +40,19 @@ async function search() {
             const parser = new DOMParser();
             const doc = parser.parseFromString(text, 'text/html');
 
-            // Extract content without navbar text
-            const navbar = doc.querySelector('nav'); // Adjust selector based on your navbar structure
-            if (navbar) navbar.remove(); // Remove navbar from the document
-            const content = doc.body.textContent || ""; // Extract plain text from body
+            // Remove navbar text
+            const navbar = doc.querySelector('nav');
+            if (navbar) navbar.remove();
 
-            console.log(`Processed text content from ${page.url}:`, content); // Debug: Log the processed text content
+            const content = doc.body.textContent || ""; // Extract plain text from body
+            console.log(`Processed text content from ${page.url}:`, content); // Debug: Log processed text
 
             // Search for the term within the page content
             const sentences = content.split(/[.!?]/); // Split into sentences
-            sentences.forEach(sentence => {
+            sentences.forEach((sentence) => {
+                console.log(`Checking sentence: "${sentence.trim()}"`); // Debug: Log each sentence
                 if (sentence.toLowerCase().includes(searchTerm)) {
+                    console.log(`Match found in sentence: "${sentence.trim()}"`); // Debug: Log matched sentence
                     const resultItem = document.createElement("div");
                     resultItem.className = "result-item";
                     resultItem.textContent = sentence.trim();
@@ -77,25 +78,3 @@ async function search() {
 
     resultsDiv.style.display = hasResults ? "block" : "none"; // Show/hide results
 }
-
-// Add event listener to search input
-document.getElementById('searchInput').addEventListener('input', search);
-
-// Hide dropdown when clicking outside
-document.addEventListener('click', (event) => {
-    const searchInput = document.getElementById('searchInput');
-    const resultsDiv = document.getElementById('results');
-
-    // Check if the click is outside the search input or results div
-    if (!searchInput.contains(event.target) && !resultsDiv.contains(event.target)) {
-        resultsDiv.style.display = "none"; // Hide results
-    }
-});
-
-// Ensure results are visible when typing
-document.getElementById('searchInput').addEventListener('focus', () => {
-    const resultsDiv = document.getElementById('results');
-    if (resultsDiv.innerHTML) {
-        resultsDiv.style.display = "block";
-    }
-});
