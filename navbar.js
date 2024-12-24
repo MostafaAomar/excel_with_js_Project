@@ -33,7 +33,7 @@ async function search() {
             const parser = new DOMParser();
             const doc = parser.parseFromString(text, 'text/html');
             const navbar = doc.querySelector('nav');
-            if (navbar) navbar.remove();
+            if (navbar) navbar remove();
 
             const content = doc.body.textContent || "";
             console.log(`Parsed content from ${page.url}:`, content); // Log the parsed content
