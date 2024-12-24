@@ -1,23 +1,32 @@
 async function submitForm(event) {
-  event.preventDefault(); // Prevent form reload
+  event.preventDefault(); // Prevent default form submission
 
-  const formData = {
-    name: document.getElementById('name').value,
-    email: document.getElementById('email').value,
-    message: document.getElementById('message').value,
-  };
+  // Get form data
+  const formData = new FormData(event.target);
+  const formObject = {};
+  formData.forEach((value, key) => { formObject[key] = value });
 
+  // Send the data to Google Apps Script Web App
   try {
     const response = await fetch('https://script.google.com/macros/s/AKfycbypfZOlAMBkyM8RZS8waUNhadlpt8IVxuGHvvcCwzd546ulGpVEwB4btSDd2DeXUzao/exec', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formObject),
     });
 
-    const result = await response.text();
-    alert(result); // Success message
+    const data = await response.json();
+    console.log(data);  // Log the response from the server
+
+    // Handle the success message
+    if (data.message) {
+      alert(data.message);
+    } else if (data.error) {
+      alert("Error: " + data.error);
+    }
   } catch (error) {
-    console.error('Error:', error);
-    alert('Failed to save data. Please try again.');
+    console.error("Error submitting the form: ", error);
+    alert("Error: " + error.message);
   }
 }
