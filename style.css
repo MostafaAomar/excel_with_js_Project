@@ -36,7 +36,7 @@
   float: right;
   margin: 22px;
  }
- a{
+.nav > .menu > a{
   text-decoration: none;
   margin: 20px;
  }
@@ -52,4 +52,7 @@
 .right {
   flex: 1;
   padding-left: 10px;
+}
+#dataForm{
+      margin: 0px 100px;
 }
