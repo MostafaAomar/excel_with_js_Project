@@ -1,58 +1,15 @@
 *{
-    margin: 0;
-  }
-  #results {
-    z-index: 0;
-    position: absolute;
-    background: whitesmoke;
-    padding: 0 39px;
-  }
-  .result-item {
-      cursor: pointer;
-      text-decoration: none;
-      color: blue;
-  }
-  .result-item:hover {
-      text-decoration: none;
-  }
-  .nav{
-    height: 70px;
-    background: aqua;
-  }
-  #searchInput{
-    margin: 20px;
-  }
-  
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 8px;
-      text-align: left;
-    }
- .menu{
-  float: right;
-  margin: 22px;
- }
-.nav > .menu > a{
-  text-decoration: none;
-  margin: 20px;
- }
- .row {
+  margin: 0;
+}
+.container {
   display: flex;
-  margin-bottom: 5px;
+  flex-direction: column;
+  align-items: center;
 }
-
-.left {
-  width: 100px;
+h1 {
+  text-align: center;
 }
-
-.right {
-  flex: 1;
-  padding-left: 10px;
-}
-#dataForm{
-      margin: 0px 100px;
+.btn {
+  width: 83px;
+  font-size: x-large;
 }
